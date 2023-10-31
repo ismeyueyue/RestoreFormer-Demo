@@ -565,6 +565,7 @@ if __name__ == "__main__":
         bs, base_lr = config.data.params.batch_size, config.model.base_learning_rate
         if not cpu:
             ngpu = len(lightning_config.trainer.gpus.strip(",").split(','))
+            print("ngpu {} => {}".format(lightning_config.trainer.gpus, ngpu))
         else:
             ngpu = 1
         accumulate_grad_batches = lightning_config.trainer.accumulate_grad_batches or 1
@@ -593,6 +594,7 @@ if __name__ == "__main__":
         # run
         if opt.train:
             try:
+                print("data: ", data)
                 trainer.fit(model, data)
             except Exception:
                 melk()
