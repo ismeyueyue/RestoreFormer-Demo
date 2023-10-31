@@ -41,9 +41,9 @@ data:
     batch_size: 4
     num_workers: 8
     train:
-      target: basicsr.data.ffhq_dataset.FFHQDataset
+      target: RestoreFormer.data.ffhq_degradation_dataset.FFHQDegradationDataset
       params:
-        dataroot_gt: data/FFHQ/images512x512
+        dataroot_gt: data/ffhq/ffhq_512
         io_backend:
           type: disk
         use_hflip: True
@@ -51,9 +51,9 @@ data:
         std: [0.5, 0.5, 0.5]
         out_size: 512
     validation:
-      target: basicsr.data.ffhq_dataset.FFHQDataset
+      target: RestoreFormer.data.ffhq_degradation_dataset.FFHQDegradationDataset
       params:
-        dataroot_gt: data/FFHQ/images512x512
+        dataroot_gt: data/ffhq/ffhq_512
         io_backend:
           type: disk
         use_hflip: False

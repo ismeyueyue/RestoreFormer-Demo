@@ -144,8 +144,8 @@ def nondefault_trainer_args(opt):
 def instantiate_from_config(config):
     if not "target" in config:
         raise KeyError("Expected key `target` to instantiate.")
-    if 'basicsr.data' in config["target"] or \
-        'FFHQDegradationDataset' in config["target"]:
+    if 'basicsr.data' in config["target"] :
+        # or 'FFHQDegradationDataset' in config["target"]:
         return get_obj_from_str(config["target"])(config.get("params", dict()))
     return get_obj_from_str(config["target"])(**config.get("params", dict()))
 
@@ -193,6 +193,7 @@ class DataModuleFromConfig(pl.LightningDataModule):
                 self.datasets[k] = WrappedDataset(self.datasets[k])
 
     def _train_dataloader(self):
+        print("DataModuleFromConfig train dataloader: ", self.datasets["train"].shape)
         return DataLoader(self.datasets["train"], batch_size=self.batch_size,
                           num_workers=self.num_workers, shuffle=True)
 
@@ -447,7 +448,7 @@ if __name__ == "__main__":
         trainer_config = lightning_config.get("trainer", OmegaConf.create())
         # default to ddp
         # trainer_config["distributed_backend"] = "ddp"
-        trainer_config["accelerator"] = "ddp"
+        # trainer_config["accelerator"] = "ddp"
         # trainer_config["plugins"]="ddp_sharded"
         for k in nondefault_trainer_args(opt):
             trainer_config[k] = getattr(opt, k)
@@ -564,8 +565,10 @@ if __name__ == "__main__":
         # configure learning rate
         bs, base_lr = config.data.params.batch_size, config.model.base_learning_rate
         if not cpu:
-            ngpu = len(lightning_config.trainer.gpus.strip(",").split(','))
-            print("ngpu {} => {}".format(lightning_config.trainer.gpus, ngpu))
+            # TODO set
+            ngpu = 1
+            # ngpu = len(lightning_config.trainer.gpus.strip(",").split(','))
+            # print("ngpu {} => {}".format(lightning_config.trainer.gpus, ngpu))
         else:
             ngpu = 1
         accumulate_grad_batches = lightning_config.trainer.accumulate_grad_batches or 1
@@ -594,7 +597,6 @@ if __name__ == "__main__":
         # run
         if opt.train:
             try:
-                print("data: ", data)
                 trainer.fit(model, data)
             except Exception:
                 melk()
