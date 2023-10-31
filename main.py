@@ -144,8 +144,8 @@ def nondefault_trainer_args(opt):
 def instantiate_from_config(config):
     if not "target" in config:
         raise KeyError("Expected key `target` to instantiate.")
-    if 'basicsr.data' in config["target"] :
-        # or 'FFHQDegradationDataset' in config["target"]:
+    if 'basicsr.data' in config["target"] or \
+        'FFHQDegradationDataset' in config["target"]:
         return get_obj_from_str(config["target"])(config.get("params", dict()))
     return get_obj_from_str(config["target"])(**config.get("params", dict()))
 

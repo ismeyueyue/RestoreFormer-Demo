@@ -41,7 +41,8 @@ data:
     batch_size: 4
     num_workers: 8
     train:
-      target: RestoreFormer.data.ffhq_degradation_dataset.FFHQDegradationDataset
+    # RestoreFormer.data.ffhq_degradation_dataset.FFHQDegradationDataset
+      target: basicsr.data.ffhq_dataset.FFHQDataset
       params:
         dataroot_gt: data/ffhq/ffhq_512
         io_backend:
@@ -51,7 +52,7 @@ data:
         std: [0.5, 0.5, 0.5]
         out_size: 512
     validation:
-      target: RestoreFormer.data.ffhq_degradation_dataset.FFHQDegradationDataset
+      target: basicsr.data.ffhq_dataset.FFHQDataset
       params:
         dataroot_gt: data/ffhq/ffhq_512
         io_backend:
